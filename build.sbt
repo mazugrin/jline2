@@ -20,4 +20,5 @@ lazy val root = (project in file("."))
     )
     Compile / javacOptions ++= Seq("-source", "1.6", "-target", "1.6")
     Compile / doc / javacOptions := Seq("-source", "1.6")
+    Test / parallelExecution := false
   })
