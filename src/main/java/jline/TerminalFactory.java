@@ -186,6 +186,10 @@ public class TerminalFactory
         return get(null);
     }
 
+    public static synchronized void set(final Terminal terminal) {
+        term = terminal;
+    }
+
     public static Terminal getFlavor(final Flavor flavor) throws Exception {
     	return getFlavor(flavor, null);
     }

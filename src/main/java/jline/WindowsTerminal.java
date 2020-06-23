@@ -29,13 +29,10 @@ import static jline.WindowsTerminal.ConsoleMode.ENABLE_WINDOW_INPUT;
  * {@link #init} is accomplished by extracting the
  * <em>jline_<i>version</i>.dll</em>, saving it to the system temporary
  * directoy (determined by the setting of the <em>java.io.tmpdir</em> System
- * property), loading the library, and then calling the Win32 APIs <a
- * href="http://msdn.microsoft.com/library/default.asp?
- * url=/library/en-us/dllproc/base/setconsolemode.asp">SetConsoleMode</a> and
- * <a href="http://msdn.microsoft.com/library/default.asp?
- * url=/library/en-us/dllproc/base/getconsolemode.asp">GetConsoleMode</a> to
+ * property), loading the library, and then calling the Win32 APIs 
+ * <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dllproc/base/setconsolemode.asp">SetConsoleMode</a> and
+ * <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dllproc/base/getconsolemode.asp">GetConsoleMode</a> to
  * disable character echoing.
- * <p/>
  * <p>
  * By default, the {@link #wrapInIfNeeded(java.io.InputStream)} method will attempt
  * to test to see if the specified {@link InputStream} is {@link System#in} or a wrapper
@@ -313,7 +310,7 @@ public class WindowsTerminal
 
     /**
      * Console mode
-     * <p/>
+     * <p>
      * Constants copied <tt>wincon.h</tt>.
      */
     public static enum ConsoleMode

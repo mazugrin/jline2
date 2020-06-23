@@ -18,7 +18,7 @@ import jline.internal.Log;
  * https://github.com/cloudius-systems/mgmt/blob/master/crash/src/main/java/com/cloudius/cli/OSvTerminal.java
  * authored by Or Cohen.
  *
- * @author <a href-"mailto:orc@fewbytes.com">Or Cohen</a>
+ * @author <a href="mailto:orc@fewbytes.com">Or Cohen</a>
  * @author <a href="mailto:arun.neelicattu@gmail.com">Arun Neelicattu</a>
  * @since 2.13
  */

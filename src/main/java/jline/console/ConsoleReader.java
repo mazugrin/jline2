@@ -220,8 +220,37 @@ public class ConsoleReader implements Closeable
         VI_CHANGE_TO
     }
 
+    private static InputStream wrapSystemIn() {
+	return new InputStream() {
+	    @Override
+	    public int read() throws IOException {
+		return System.in.read();
+	    }
+	};
+    }
+    private static OutputStream wrapSystemOut() {
+	return new OutputStream() {
+	    @Override
+	    public void write(int b) throws IOException {
+		System.out.write(b);
+	    }
+	    @Override
+	    public void write(byte[] b) throws IOException {
+	      write(b, 0, b.length);
+	    }
+	    @Override
+	    public void write(byte[] b, int offset, int len) throws IOException {
+		System.out.write(b, offset, len);
+		System.out.flush();
+	    }
+	    @Override
+	    public void flush() throws IOException {
+	        System.out.flush();
+	    }
+	};
+    }
     public ConsoleReader() throws IOException {
-        this(null, new FileInputStream(FileDescriptor.in), System.out, null);
+        this(null, wrapSystemIn(), wrapSystemOut(), null);
     }
 
     public ConsoleReader(final InputStream in, final OutputStream out) throws IOException {
@@ -508,7 +537,7 @@ public class ConsoleReader implements Closeable
      * <pre>
      * myConsoleReader.setEchoCharacter(new Character('*'));
      * </pre>
-     * Setting the character to <code>null</code> will restore normal character echoing.<p/>
+     * Setting the character to <code>null</code> will restore normal character echoing.<p>
      * Setting the character to <code>Character.valueOf(0)</code> will cause nothing to be echoed.
      *
      * @param c the character to echo to the console in place of the typed character.
@@ -3705,7 +3734,7 @@ public class ConsoleReader implements Closeable
 
     /**
      * Adding a triggered Action allows to give another curse of action if a character passed the pre-processing.
-     * <p/>
+     * <p>
      * Say you want to close the application if the user enter q.
      * addTriggerAction('q', new ActionListener(){ System.exit(0); }); would do the trick.
      */

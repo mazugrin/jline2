@@ -25,7 +25,7 @@ import java.io.InputStream;
  *          the thread that handles blocking I/O.
  * </ul>
  * @since 2.7
- * @author Scott C. Gray <scottgray1@gmail.com>
+ * @author Scott C. Gray scottgray1@gmail.com
  */
 public class NonBlockingInputStream
     extends InputStream
