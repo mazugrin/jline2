@@ -27,7 +27,7 @@ public class Urls
      * <p>If the string represents a valid URL in a supported protocol, that URL is returned.
      *    Otherwise, the string is treated as a file path converted to a URL.</p>
      *
-     * @param file the file path.
+     * @param input the file path.
      * @return the URL.
      * @throws SecurityException if the file path cannot be accessed.
      */

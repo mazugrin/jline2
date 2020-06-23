@@ -26,7 +26,7 @@ import static jline.internal.Preconditions.checkNotNull;
 
 /**
  * {@link History} using a file for persistent backing.
- * <p/>
+ * <p>
  * Implementers should install shutdown hook to call {@link FileHistory#flush}
  * to save history to disk.
  *

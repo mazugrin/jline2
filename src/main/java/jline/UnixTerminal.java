@@ -119,7 +119,7 @@ public class UnixTerminal
     }
 
     /**
-     * Returns the value of <tt>stty rows>/tt> param.
+     * Returns the value of <tt>stty rows</tt> param.
      */
     @Override
     public int getHeight() {
