@@ -12,7 +12,7 @@ val root = (project in file("."))
     name := "jline",
     autoScalaLibrary := false,
     crossPaths := false,
-    libraryDependencies += "org.fusesource.jansi" % "jansi" % "1.12",
+    libraryDependencies += "org.fusesource.jansi" % "jansi" % "2.0.1",
     libraryDependencies ++= Seq(
       junit % Test,
       easymock % Test,
@@ -23,6 +23,7 @@ val root = (project in file("."))
     Compile / javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
     Compile / doc / javacOptions := Nil,
     Test / parallelExecution := false,
+    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat,
   )
 
 ThisBuild / organization := "org.scala-sbt.jline"

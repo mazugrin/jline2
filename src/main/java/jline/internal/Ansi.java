@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.fusesource.jansi.AnsiOutputStream;
+import org.fusesource.jansi.AnsiProcessor;
 
 /**
  * Ansi support.
@@ -25,7 +26,7 @@ public class Ansi {
         if (str == null) return "";
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            AnsiOutputStream aos = new AnsiOutputStream(baos);
+            AnsiOutputStream aos = new AnsiOutputStream(baos, new AnsiProcessor(baos));
             aos.write(str.getBytes());
             aos.close();
             return baos.toString();

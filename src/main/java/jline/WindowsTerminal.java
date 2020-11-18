@@ -15,7 +15,6 @@ import java.io.InputStream;
 
 import jline.internal.Configuration;
 import jline.internal.Log;
-import org.fusesource.jansi.internal.WindowsSupport;
 import org.fusesource.jansi.internal.Kernel32;
 import static org.fusesource.jansi.internal.Kernel32.*;
 
@@ -62,6 +61,38 @@ public class WindowsTerminal
     public WindowsTerminal() throws Exception {
         super(true);
     }
+
+    private static int getConsoleMode() {
+      long hConsole = GetStdHandle (STD_INPUT_HANDLE);
+      if (hConsole == INVALID_HANDLE_VALUE)
+        return -1;
+      int mode[] = new int[1];
+      if (GetConsoleMode (hConsole, mode)==0)
+        return -1;
+      return mode[0];
+    }
+
+    private static void setConsoleMode(int mode) {
+      long hConsole = GetStdHandle (STD_INPUT_HANDLE);
+      if (hConsole == INVALID_HANDLE_VALUE)
+        return;
+      SetConsoleMode (hConsole, mode);
+    }
+
+    private static int getWindowsTerminalWidth() {
+      long outputHandle = GetStdHandle (STD_OUTPUT_HANDLE);
+      CONSOLE_SCREEN_BUFFER_INFO info = new CONSOLE_SCREEN_BUFFER_INFO();
+      GetConsoleScreenBufferInfo (outputHandle, info);
+      return info.windowWidth();
+    }
+
+    private static int getWindowsTerminalHeight() {
+      long outputHandle = GetStdHandle (STD_OUTPUT_HANDLE);
+      CONSOLE_SCREEN_BUFFER_INFO info = new CONSOLE_SCREEN_BUFFER_INFO();
+      GetConsoleScreenBufferInfo (outputHandle, info);
+      return info.windowHeight();
+    }
+
 
     @Override
     public void init() throws Exception {
@@ -201,22 +232,18 @@ public class WindowsTerminal
         return super.getOutputEncoding();
     }
 
-    //
-    // Native Bits
-    //
-    private static int getConsoleMode() {
-        return WindowsSupport.getConsoleMode();
-    }
-
-    private static void setConsoleMode(int mode) {
-        WindowsSupport.setConsoleMode(mode);
+    private static INPUT_RECORD[] readConsoleInput(int count) throws IOException {
+      long hConsole = GetStdHandle (STD_INPUT_HANDLE);
+      if (hConsole == INVALID_HANDLE_VALUE)
+        return null;
+      return readConsoleInputHelper(hConsole, count, false);
     }
 
     private byte[] readConsoleInput() {
         // XXX does how many events to read in one call matter?
         INPUT_RECORD[] events = null;
         try {
-            events = WindowsSupport.readConsoleInput(1);
+            events = readConsoleInput(1);
         } catch (IOException e) {
             Log.debug("read Windows console input error: ", e);
         }
@@ -298,14 +325,6 @@ public class WindowsTerminal
 
     private static int getConsoleOutputCodepage() {
         return Kernel32.GetConsoleOutputCP();
-    }
-
-    private static int getWindowsTerminalWidth() {
-        return WindowsSupport.getWindowsTerminalWidth();
-    }
-
-    private static int getWindowsTerminalHeight() {
-        return WindowsSupport.getWindowsTerminalHeight();
     }
 
     /**

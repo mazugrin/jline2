@@ -11,9 +11,10 @@ package jline;
 import jline.internal.Configuration;
 import org.fusesource.jansi.AnsiConsole;
 import org.fusesource.jansi.AnsiOutputStream;
-import org.fusesource.jansi.WindowsAnsiOutputStream;
+import org.fusesource.jansi.AnsiProcessor;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FilterOutputStream;
 import java.io.OutputStream;
 
 /**
@@ -25,6 +26,11 @@ public class AnsiWindowsTerminal
     extends WindowsTerminal
 {
     private final boolean ansiSupported = detectAnsiSupport();
+    private static class WindowsAnsiOutputStream extends AnsiOutputStream {
+      WindowsAnsiOutputStream(OutputStream os) {
+        super(os, new AnsiProcessor(os));
+      }
+    }
 
     @Override
     public OutputStream wrapOutIfNeeded(OutputStream out) {
@@ -48,20 +54,25 @@ public class AnsiWindowsTerminal
                 // this happens when the stdout is being redirected to a file.
             }
             // Use the ANSIOutputStream to strip out the ANSI escape sequences.
-            return new AnsiOutputStream(stream);
+            return new AnsiOutputStream(stream, new AnsiProcessor(stream));
         }
         return stream;
     }
 
+
     private static boolean detectAnsiSupport() {
-        OutputStream out = AnsiConsole.wrapOutputStream(new ByteArrayOutputStream());
+      try {
+        OutputStream out = new WindowsAnsiOutputStream(new ByteArrayOutputStream());
         try {
             out.close();
+            return true;
         }
         catch (Exception e) {
             // ignore;
         }
-        return out instanceof WindowsAnsiOutputStream;
+      } catch (Exception e) {
+      }
+      return false;
     }
 
     public AnsiWindowsTerminal() throws Exception {
