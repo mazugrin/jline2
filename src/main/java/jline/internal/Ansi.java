@@ -10,9 +10,14 @@ package jline.internal;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
-import org.fusesource.jansi.AnsiOutputStream;
-import org.fusesource.jansi.AnsiProcessor;
+import org.fusesource.jansi.AnsiMode;
+import org.fusesource.jansi.AnsiColors;
+import org.fusesource.jansi.AnsiConsole;
+import org.fusesource.jansi.AnsiType;
+import org.fusesource.jansi.io.AnsiOutputStream;
+import org.fusesource.jansi.io.AnsiProcessor;
 
 /**
  * Ansi support.
@@ -26,7 +31,18 @@ public class Ansi {
         if (str == null) return "";
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            AnsiOutputStream aos = new AnsiOutputStream(baos, new AnsiProcessor(baos));
+            AnsiOutputStream aos =
+                new AnsiOutputStream(
+                    baos,
+                    AnsiMode.Strip,
+                    new AnsiProcessor(baos),
+                    AnsiType.Emulation,
+                    AnsiColors.TrueColor,
+                    Charset.defaultCharset(),
+                    null,
+                    null,
+                    false
+                );
             aos.write(str.getBytes());
             aos.close();
             return baos.toString();

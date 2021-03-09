@@ -1,4 +1,4 @@
-val jansi = "org.fusesource.jansi" % "jansi" % "1.12"
+val jansi = "org.fusesource.jansi" % "jansi" % "2.1.0"
 val junit = "com.novocode" % "junit-interface" % "0.11"
 val easymock = "org.easymock" % "easymock" % "3.3.1"
 val powermockVersion = "1.6.2"
@@ -12,7 +12,7 @@ val root = (project in file("."))
     name := "jline",
     autoScalaLibrary := false,
     crossPaths := false,
-    libraryDependencies += "org.fusesource.jansi" % "jansi" % "2.0.1",
+    libraryDependencies += jansi,
     libraryDependencies ++= Seq(
       junit % Test,
       easymock % Test,
