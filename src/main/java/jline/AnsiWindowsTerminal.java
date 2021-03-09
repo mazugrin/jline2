@@ -9,13 +9,17 @@
 package jline;
 
 import jline.internal.Configuration;
+import org.fusesource.jansi.AnsiMode;
+import org.fusesource.jansi.AnsiColors;
 import org.fusesource.jansi.AnsiConsole;
-import org.fusesource.jansi.AnsiOutputStream;
-import org.fusesource.jansi.AnsiProcessor;
+import org.fusesource.jansi.AnsiType;
+import org.fusesource.jansi.io.AnsiOutputStream;
+import org.fusesource.jansi.io.AnsiProcessor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FilterOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 /**
  * ANSI-supported {@link WindowsTerminal}.
@@ -28,7 +32,17 @@ public class AnsiWindowsTerminal
     private final boolean ansiSupported = detectAnsiSupport();
     private static class WindowsAnsiOutputStream extends AnsiOutputStream {
       WindowsAnsiOutputStream(OutputStream os) {
-        super(os, new AnsiProcessor(os));
+          super(
+              os,
+              AnsiMode.Strip,
+              new AnsiProcessor(os),
+              AnsiType.Emulation,
+              AnsiColors.TrueColor,
+              Charset.defaultCharset(),
+              null,
+              null,
+              false
+          );
       }
     }
 
@@ -54,7 +68,17 @@ public class AnsiWindowsTerminal
                 // this happens when the stdout is being redirected to a file.
             }
             // Use the ANSIOutputStream to strip out the ANSI escape sequences.
-            return new AnsiOutputStream(stream, new AnsiProcessor(stream));
+            return new AnsiOutputStream(
+                stream,
+                AnsiMode.Strip,
+                new AnsiProcessor(stream),
+                AnsiType.Emulation,
+                AnsiColors.TrueColor,
+                Charset.defaultCharset(),
+                null,
+                null,
+                false
+            );
         }
         return stream;
     }
