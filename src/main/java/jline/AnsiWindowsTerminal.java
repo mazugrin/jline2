@@ -34,6 +34,7 @@ public class AnsiWindowsTerminal
       WindowsAnsiOutputStream(OutputStream os) {
           super(
               os,
+              new AnsiOutputStream.ZeroWidthSupplier(),
               AnsiMode.Strip,
               new AnsiProcessor(os),
               AnsiType.Emulation,
@@ -70,6 +71,7 @@ public class AnsiWindowsTerminal
             // Use the ANSIOutputStream to strip out the ANSI escape sequences.
             return new AnsiOutputStream(
                 stream,
+                new AnsiOutputStream.ZeroWidthSupplier(),
                 AnsiMode.Strip,
                 new AnsiProcessor(stream),
                 AnsiType.Emulation,
