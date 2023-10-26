@@ -34,6 +34,7 @@ public class Ansi {
             AnsiOutputStream aos =
                 new AnsiOutputStream(
                     baos,
+                    new AnsiOutputStream.ZeroWidthSupplier(),
                     AnsiMode.Strip,
                     new AnsiProcessor(baos),
                     AnsiType.Emulation,
